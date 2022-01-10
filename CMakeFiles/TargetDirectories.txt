@@ -1,0 +1,3 @@
+/home/sipc-gestos/Escritorio/trabajo/La_wea/CMakeFiles/rebuild_cache.dir
+/home/sipc-gestos/Escritorio/trabajo/La_wea/CMakeFiles/webcam.dir
+/home/sipc-gestos/Escritorio/trabajo/La_wea/CMakeFiles/edit_cache.dir
