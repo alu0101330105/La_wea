@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/sipc-gestos/Escritorio/trabajo/La_wea/main.cpp" "/home/sipc-gestos/Escritorio/trabajo/La_wea/CMakeFiles/webcam.dir/main.cpp.o"
+  "/home/sipc-gestos/SIPC/La_wea/main.cpp" "/home/sipc-gestos/SIPC/La_wea/CMakeFiles/webcam.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

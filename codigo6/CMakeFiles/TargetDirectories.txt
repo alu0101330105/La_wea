@@ -1,0 +1,3 @@
+/home/sipc-gestos/SIPC/La_wea/codigo6/CMakeFiles/rebuild_cache.dir
+/home/sipc-gestos/SIPC/La_wea/codigo6/CMakeFiles/contours.dir
+/home/sipc-gestos/SIPC/La_wea/codigo6/CMakeFiles/edit_cache.dir

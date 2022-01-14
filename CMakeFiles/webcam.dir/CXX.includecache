@@ -6,8 +6,12 @@
 
 #IncludeRegexTransform: 
 
-/home/sipc-gestos/Escritorio/trabajo/La_wea/main.cpp
+/home/sipc-gestos/SIPC/La_wea/main.cpp
 iostream
+-
+stdlib.h
+-
+unistd.h
 -
 opencv2/imgcodecs.hpp
 -
