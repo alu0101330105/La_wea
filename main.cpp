@@ -10,11 +10,8 @@
 using namespace cv;
 using namespace std;
 
-int Capture(string);
-int Contourn(Mat);
-
-int Capture(string video_name) {
-	Mat frame, roi, fgMask, image;
+int Capture() {
+	Mat frame, roi, fgMask;
 	vector<vector<Point> > contours;
 	VideoCapture cap;
 	cap.open(0);
@@ -27,20 +24,16 @@ int Capture(string video_name) {
 	namedWindow("Frame");
 	namedWindow("Roi");
 	namedWindow("Foreground Mask");
-	namedWindow("Contours");
 
 	int frame_width = cap.get(CAP_PROP_FRAME_WIDTH); 
 	int frame_height = cap.get(CAP_PROP_FRAME_HEIGHT); 
-
-	int codec = VideoWriter::fourcc('M','J','P','G');
-	VideoWriter video(video_name,codec,20, Size(frame_width,frame_height));
 
 	int aux = -1;
 
 	Rect rect(400,100,200,200);	
 	while(true) {
 
-		cap>>frame;
+		cap >> frame;
 		flip(frame,frame,1);
 
 		frame(rect).copyTo(roi);
@@ -48,13 +41,17 @@ int Capture(string video_name) {
 
 		rectangle(frame, rect,Scalar(255,0,0));
 
+		findContours(fgMask,contours,RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+		drawContours(roi, contours, -1, Scalar(0,255,0),3);
+
+		vector<vector<Point> > hull(contours.size());
+		for (size_t i = 0; i < contours.size(); i++)
+			convexHull(contours[i], hull[i]);
+		drawContours(roi, hull, -1, Scalar(255,0,0),3);
+
 		imshow("Frame",frame);
 		imshow("Roi",roi);
 		imshow("Foreground Mask",fgMask);
-
-		//Contourn(fgMask);
-
-		video.write(frame);
 
 		int c = waitKey(40);
 
@@ -66,57 +63,12 @@ int Capture(string video_name) {
 
 		if ((char)c =='q') break;
 	}
-	video.release();
 	cap.release();
 	destroyAllWindows();
 }
 
-int OpenVid(string video_name) {
-	Mat frame;
-	VideoCapture cap;
-	cap.open(video_name);
-
-	if (!cap.isOpened()) {
-		printf("Error opening cam\n");
-		return -1;
-	}
-	namedWindow("Frame");
-	
-	while(true) {
-
-		cap>>frame;
-		if (frame.empty())
-			break;		
-		imshow("Frame",frame);
-
-		int c = waitKey(40);
-
-		if ((char)c =='q') break;
-	}
-	cap.release();
-	destroyAllWindows();
-}
-
-int Contourn(Mat image) {
-	Mat gray;
-
-	namedWindow("Contours");
-	vector<vector<Point> > contours;
-
-	cvtColor(image,gray,COLOR_RGB2GRAY);
-	threshold(gray,gray,127,255,THRESH_BINARY);
-	
-	findContours(gray,contours,RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
-	drawContours(image, contours, -1, Scalar(0,255,0),3);
-	
-	imshow("Contours", image);
-
-	waitKey(0);
-}
 
 int main(int argc, char* argv[])
 {
-	string video_name = "out.avi";
-	Capture(video_name);
-	//OpenVid(video_name);
+	Capture();
 }
