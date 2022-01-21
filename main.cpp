@@ -10,9 +10,25 @@
 using namespace cv;
 using namespace std;
 
+double angle(Point s, Point e, Point f) {
+    double v1[2],v2[2];
+    v1[0] = s.x - f.x;
+    v1[1] = s.y - f.y;
+    v2[0] = e.x - f.x;
+    v2[1] = e.y - f.y;
+    double ang1 = atan2(v1[1], v1[0]);
+    double ang2 = atan2(v2[1], v2[0]);
+
+    double ang = ang1 - ang2;
+    if (ang > CV_PI) ang -= 2*CV_PI;
+    if (ang < -CV_PI) ang += 2*CV_PI;
+
+    return ang*180/CV_PI;
+}
+
 int Capture() {
 	Mat frame, roi, fgMask;
-	vector<vector<Point> > contours;
+	vector<vector<Point>> contours;
 	VideoCapture cap;
 	cap.open(0);
 	Ptr<BackgroundSubtractor> pBackSub=createBackgroundSubtractorMOG2();
@@ -44,10 +60,25 @@ int Capture() {
 		findContours(fgMask,contours,RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 		drawContours(roi, contours, -1, Scalar(0,255,0),3);
 
-		vector<vector<Point> > hull(contours.size());
-		for (size_t i = 0; i < contours.size(); i++)
-			convexHull(contours[i], hull[i]);
-		drawContours(roi, hull, -1, Scalar(255,0,0),3);
+		vector<int> hull;
+		for (int k = 0; k < contours.size(); k++) {
+			convexHull(contours[k], hull,false,false);
+			sort(hull.begin(),hull.end(),greater <int>());
+
+			vector<Vec4i> defects;
+			convexityDefects(contours[k], hull, defects);
+			for (int i = 0; i < defects.size(); i++) {
+				Point s = contours[k][defects[i][0]];
+				Point e = contours[k][defects[i][1]];
+				Point f = contours[k][defects[i][2]];
+				float depth = (float)defects[i][3] / 256.0;
+				double ang = angle(s,e,f);
+				if (ang <= 90 && depth > 30) {
+					circle(roi, f,5,Scalar(0,0,255),-1);
+					line(roi,s,e,Scalar(255,0,0),2);
+				}
+			}
+		}
 
 		imshow("Frame",frame);
 		imshow("Roi",roi);

@@ -1,0 +1,3 @@
+/home/sipc-gestos/SIPC/La_wea/codigo8/CMakeFiles/rebuild_cache.dir
+/home/sipc-gestos/SIPC/La_wea/codigo8/CMakeFiles/conv_defects.dir
+/home/sipc-gestos/SIPC/La_wea/codigo8/CMakeFiles/edit_cache.dir
